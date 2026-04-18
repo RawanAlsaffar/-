@@ -292,15 +292,25 @@ def get_logo_path() -> str | None:
 def fig_layout(fig, title, height=390, legend=True):
     fig.update_layout(
         title=title,
-        title_x=0.02,
+        title_x=0.5,           # جعل العنوان في المنتصف تماماً ليكون أرتب
+        title_y=0.98,          # رفع العنوان لأقصى نقطة علوية في الرسمة
+        title_xanchor='center',
+        title_yanchor='top',
         height=height,
         paper_bgcolor=BG,
         plot_bgcolor=CARD,
-        font=dict(family='Arial', color=TEXT, size=13),
-        margin=dict(l=25, r=25, t=58, b=25),
+        font=dict(family='Arial', color=TEXT, size=14),
+        
+        # التعديل السحري هنا: زدنا الهامش العلوي (t=100) لتوفير مساحة للعنوان
+        margin=dict(l=30, r=30, t=100, b=40), 
+        
         legend=dict(
-            orientation='h', yanchor='bottom', y=1.02, x=0,
-            bgcolor='rgba(0,0,0,0)', font=dict(color=TEXT)
+            orientation='h', 
+            yanchor='bottom', 
+            y=1.02, 
+            x=0,
+            bgcolor='rgba(0,0,0,0)', 
+            font=dict(color=TEXT)
         ) if legend else None,
         xaxis=dict(gridcolor=GRID, zerolinecolor=GRID, showline=False),
         yaxis=dict(gridcolor=GRID, zerolinecolor=GRID, showline=False),
@@ -587,8 +597,12 @@ fig_city = px.bar(city.sort_values('size'), x='size', y='المدينة', orient
 fig_layout(fig_city, 'أعلى المدن من حيث عدد الحوادث', height=420)
 
 stage_name_col = 'مرحلة_تحليلية' if 'مرحلة_تحليلية' in stage.columns else 'المركبات/ مرحلة الرحلة الإسعافية'
+
 fig_stage = px.pie(stage, names=stage_name_col, values='size', hole=0.6, color_discrete_sequence=SEQ)
+
 fig_layout(fig_stage, 'الحوادث حسب المرحلة التشغيلية', height=420)
+# ------------------
+
 
 fig_status = px.bar(status, x='حالة المورد بعد الحدث', y='size', text='size', color='حالة المورد بعد الحدث', color_discrete_sequence=['#34d399', '#fb7185', '#60a5fa'])
 fig_layout(fig_status, 'وضع المورد بعد الحادث', height=360)
@@ -755,3 +769,4 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
